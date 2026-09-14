@@ -1,0 +1,18 @@
+{
+  "id": "neve-shalom",
+  "name": "בית כנסת נווה שלום",
+  "icon": "🏠",
+  "weekday": {
+    "prayers": [],
+    "notes": [],
+    "updatedAt": null
+  },
+  "shabbat": {
+    "prayers": [],
+    "notes": [],
+    "updatedAt": null
+  },
+  "holidays": [],
+  "updatedAt": null,
+  "source": null
+}

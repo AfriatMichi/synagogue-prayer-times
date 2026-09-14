@@ -1,0 +1,18 @@
+{
+  "id": "merkazi",
+  "name": "בית כנסת מרכזי",
+  "icon": "🏛️",
+  "weekday": {
+    "prayers": [],
+    "notes": [],
+    "updatedAt": null
+  },
+  "shabbat": {
+    "prayers": [],
+    "notes": [],
+    "updatedAt": null
+  },
+  "holidays": [],
+  "updatedAt": null,
+  "source": null
+}

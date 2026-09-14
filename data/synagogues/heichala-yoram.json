@@ -1,0 +1,18 @@
+{
+  "id": "heichala-yoram",
+  "name": "היכלא דרבנו יורם",
+  "icon": "🏠",
+  "weekday": {
+    "prayers": [],
+    "notes": [],
+    "updatedAt": null
+  },
+  "shabbat": {
+    "prayers": [],
+    "notes": [],
+    "updatedAt": null
+  },
+  "holidays": [],
+  "updatedAt": null,
+  "source": null
+}

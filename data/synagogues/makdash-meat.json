@@ -1,0 +1,18 @@
+{
+  "id": "makdash-meat",
+  "name": "בית כנסת מקדש מעט",
+  "icon": "🕍",
+  "weekday": {
+    "prayers": [],
+    "notes": [],
+    "updatedAt": null
+  },
+  "shabbat": {
+    "prayers": [],
+    "notes": [],
+    "updatedAt": null
+  },
+  "holidays": [],
+  "updatedAt": null,
+  "source": null
+}

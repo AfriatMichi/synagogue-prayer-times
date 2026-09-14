@@ -1,0 +1,18 @@
+{
+  "id": "zechor-leavraham",
+  "name": "בית כנסת זכור לאברהם",
+  "icon": "🏠",
+  "weekday": {
+    "prayers": [],
+    "notes": [],
+    "updatedAt": null
+  },
+  "shabbat": {
+    "prayers": [],
+    "notes": [],
+    "updatedAt": null
+  },
+  "holidays": [],
+  "updatedAt": null,
+  "source": null
+}

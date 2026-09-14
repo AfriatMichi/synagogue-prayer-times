@@ -1,0 +1,73 @@
+name: Telegram Poller
+
+# No webhook anywhere in this project: GitHub Actions polls getUpdates on a
+# schedule, so the whole pipeline needs nothing but this repository.
+on:
+  schedule:
+    # Every 30 minutes. GitHub routinely runs scheduled jobs late under load,
+    # so treat this as "about every half hour", not a guarantee.
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# Two simultaneous getUpdates calls on one bot token return 409 Conflict, and a
+# second job would also race on the commit. Queue runs instead of cancelling
+# them - a cancelled run could drop a preview it already sent.
+concurrency:
+  group: telegram-poller
+  cancel-in-progress: false
+
+jobs:
+  poll:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Check secrets
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_OWNER_ID: ${{ secrets.TELEGRAM_OWNER_ID }}
+        run: |
+          missing=""
+          [ -z "$TELEGRAM_BOT_TOKEN" ] && missing="$missing TELEGRAM_BOT_TOKEN"
+          [ -z "$TELEGRAM_OWNER_ID" ] && missing="$missing TELEGRAM_OWNER_ID"
+          if [ -n "$missing" ]; then
+            echo "::error::Missing repository secret(s):$missing"
+            echo "Set them with: gh secret set <NAME> --repo ${{ github.repository }}"
+            exit 1
+          fi
+
+      - name: Poll Telegram and process updates
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_OWNER_ID: ${{ secrets.TELEGRAM_OWNER_ID }}
+        run: node src/run.js
+
+      # The offset only moves forward in a file this step commits. If the push
+      # fails, the next run re-reads the same updates from Telegram rather than
+      # losing them.
+      - name: Commit and push
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "nothing changed"
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "chore: telegram sync $(date -u +'%Y-%m-%d %H:%M UTC')"
+          for attempt in 1 2 3; do
+            if git push; then
+              exit 0
+            fi
+            echo "push rejected (attempt $attempt), rebasing on origin"
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME}" || true
+          done
+          echo "::error::could not push after 3 attempts"
+          exit 1

@@ -1,0 +1,59 @@
+{
+  "updatedAt": "2026-09-14T08:59:58.832Z",
+  "synagogues": [
+    {
+      "id": "klal-yisrael",
+      "name": "בית כנסת כלל ישראל",
+      "icon": "🏠",
+      "updatedAt": null
+    },
+    {
+      "id": "merkazi",
+      "name": "בית כנסת מרכזי",
+      "icon": "🏛️",
+      "updatedAt": null
+    },
+    {
+      "id": "makdash-meat",
+      "name": "בית כנסת מקדש מעט",
+      "icon": "🕍",
+      "updatedAt": null
+    },
+    {
+      "id": "neve-rachamim",
+      "name": "בית כנסת נווה רחמים",
+      "icon": "🏠",
+      "updatedAt": null
+    },
+    {
+      "id": "nisanit",
+      "name": "בית כנסת ניסנית",
+      "icon": "🏠",
+      "updatedAt": null
+    },
+    {
+      "id": "neve-shalom",
+      "name": "בית כנסת נווה שלום",
+      "icon": "🏠",
+      "updatedAt": null
+    },
+    {
+      "id": "heichala-yoram",
+      "name": "היכלא דרבנו יורם",
+      "icon": "🏠",
+      "updatedAt": null
+    },
+    {
+      "id": "kurkari",
+      "name": "בית הכנסת הכורכרי",
+      "icon": "🏠",
+      "updatedAt": null
+    },
+    {
+      "id": "zechor-leavraham",
+      "name": "בית כנסת זכור לאברהם",
+      "icon": "🏠",
+      "updatedAt": null
+    }
+  ]
+}

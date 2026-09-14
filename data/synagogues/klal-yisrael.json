@@ -1,0 +1,18 @@
+{
+  "id": "klal-yisrael",
+  "name": "בית כנסת כלל ישראל",
+  "icon": "🏠",
+  "weekday": {
+    "prayers": [],
+    "notes": [],
+    "updatedAt": null
+  },
+  "shabbat": {
+    "prayers": [],
+    "notes": [],
+    "updatedAt": null
+  },
+  "holidays": [],
+  "updatedAt": null,
+  "source": null
+}
