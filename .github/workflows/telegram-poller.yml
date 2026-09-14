@@ -39,9 +39,9 @@ concurrency:
 jobs:
   poll:
     runs-on: ubuntu-latest
-    # The loop targets ~10 minutes; this only stops a wedged run from holding
+    # The loop targets ~5 minutes; this only stops a wedged run from holding
     # the concurrency group for the default six hours.
-    timeout-minutes: 15
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
 
@@ -74,12 +74,12 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_OWNER_ID: ${{ secrets.TELEGRAM_OWNER_ID }}
           POLL_TIMEOUT: '25'
-          # ~10 minutes. Short enough that each of the four cron attempts an
-          # hour becomes its own visible run instead of being swallowed as a
-          # pending one behind a long loop - which is how we can tell how many
-          # attempts GitHub actually delivers. The cost is coverage: a trigger
-          # that lands buys 10 minutes of live bot, not 50.
-          LOOP_SECONDS: '600'
+          # ~5 minutes, paired with the four cron attempts an hour above. Short
+          # runs never overlap, so each attempt shows up as its own run and it
+          # stays visible how many GitHub actually delivers. The cost is
+          # coverage: a trigger that lands buys 5 minutes of live bot, so even
+          # with every attempt delivered the bot listens a third of the hour.
+          LOOP_SECONDS: '300'
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
