@@ -6,7 +6,7 @@ import { matchKey, normalizeText } from '../src/normalize.js';
 const registry = loadRegistry();
 
 test('the shipped registry is well formed', () => {
-  assert.ok(registry.length >= 9);
+  assert.ok(registry.length >= 7);
   const ids = registry.map((s) => s.id);
   assert.equal(new Set(ids).size, ids.length, 'ids must be unique');
   for (const shul of registry) {
@@ -20,8 +20,22 @@ test('aliases match inside a real message line', () => {
   assert.equal(matchSynagogue('*כלל ישראל- ערב ראש השנה*', registry).id, 'klal-yisrael');
   assert.equal(
     matchSynagogue('זמני תפילות יום חול "זכור לאברהם"', registry).id,
-    'zechor-leavraham',
+    'makdash-meat',
   );
+});
+
+test('זכור לאברהם and מקדש מעט are the same synagogue', () => {
+  // The gabbai uses both names for one shul; they must land in one data file.
+  assert.equal(matchSynagogue('זכור לאברהם', registry).id, 'makdash-meat');
+  assert.equal(matchSynagogue('מקדש מעט', registry).id, 'makdash-meat');
+  assert.equal(registry.find((s) => s.id === 'zechor-leavraham'), undefined);
+});
+
+test('נווה רחמים is deliberately absent', () => {
+  // The portal feeds that shul from its own scraper in another repo, so the bot
+  // must never recognise it and publish times nothing reads.
+  assert.equal(registry.find((s) => s.id === 'neve-rachamim'), undefined);
+  assert.equal(matchSynagogue('זמני תפילות נווה רחמים', registry), null);
 });
 
 test('the longest alias wins', () => {

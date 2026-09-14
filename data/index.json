@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-14T09:25:40.253Z",
+  "updatedAt": "2026-09-14T10:09:05.291Z",
   "synagogues": [
     {
       "id": "klal-yisrael",
@@ -17,13 +17,7 @@
       "id": "makdash-meat",
       "name": "בית כנסת מקדש מעט",
       "icon": "🕍",
-      "updatedAt": null
-    },
-    {
-      "id": "neve-rachamim",
-      "name": "בית כנסת נווה רחמים",
-      "icon": "🏠",
-      "updatedAt": null
+      "updatedAt": "2026-09-14T09:25:40.252Z"
     },
     {
       "id": "nisanit",
@@ -48,12 +42,6 @@
       "name": "בית הכנסת הכורכרי",
       "icon": "🏠",
       "updatedAt": null
-    },
-    {
-      "id": "zechor-leavraham",
-      "name": "בית כנסת זכור לאברהם",
-      "icon": "🏠",
-      "updatedAt": "2026-09-14T09:25:40.252Z"
     }
   ]
 }

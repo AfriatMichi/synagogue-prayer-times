@@ -115,7 +115,8 @@ test('makdash meat / tzom gedalia - minyan context must not leak', () => {
 test('zechor leavraham / weekday - bare minyan lines inherit the prayer above', () => {
   const parsed = parseMessage(fixture('zechor-leavraham-weekday.txt'), registry);
 
-  assert.equal(parsed.synagogueId, 'zechor-leavraham');
+  // "זכור לאברהם" is a second name for מקדש מעט, not a second synagogue.
+  assert.equal(parsed.synagogueId, 'makdash-meat');
   assert.equal(parsed.dayType, 'weekday');
   assert.equal(parsed.dayTypeInferred, false, 'the message says יום חול explicitly');
 
