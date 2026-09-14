@@ -24,6 +24,13 @@ export const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN ?? '';
 export const OWNER_ID = String(process.env.TELEGRAM_OWNER_ID ?? '').trim();
 export const DRY_RUN = process.env.DRY_RUN === '1';
 
+/**
+ * Seconds getUpdates may block waiting for a message (Telegram long polling).
+ * 0 returns immediately. The workflow sets ~25 so a forwarded message is picked
+ * up within seconds instead of waiting for the next cron tick.
+ */
+export const POLL_TIMEOUT = Math.min(50, Math.max(0, Number(process.env.POLL_TIMEOUT) || 0));
+
 /** How many recently handled update ids to remember, to absorb replays. */
 export const PROCESSED_RING = 200;
 

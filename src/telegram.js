@@ -30,11 +30,16 @@ export async function call(method, params = {}) {
     return { ok: true, result: { message_id: 0 }, dryRun: true };
   }
 
+  // A long poll legitimately blocks for `timeout` seconds; anything beyond that
+  // plus a margin is a hung connection, not a slow answer.
+  const budget = ((Number(params.timeout) || 0) + 20) * 1000;
+
   for (let attempt = 0; attempt < 2; attempt += 1) {
     const res = await fetch(API(method), {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify(params),
+      signal: AbortSignal.timeout(budget),
     });
     const body = await res.json().catch(() => ({ ok: false, description: 'non-JSON response' }));
 

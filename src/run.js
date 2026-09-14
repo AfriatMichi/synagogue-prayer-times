@@ -14,6 +14,7 @@ import { appendFileSync } from 'node:fs';
 import {
   MAX_UPDATE_AGE_SECONDS,
   OWNER_ID,
+  POLL_TIMEOUT,
   PATHS,
   PROCESSED_RING,
   assertConfigured,
@@ -353,13 +354,13 @@ async function handleUpdate(update, registry) {
 
 async function fetchUpdates(offset) {
   try {
-    return await getUpdates(offset);
+    return await getUpdates(offset, { timeout: POLL_TIMEOUT });
   } catch (err) {
     if (err instanceof TelegramError && err.code === 409) {
       // A webhook is registered; this project polls, so drop it and retry once.
       note('409 conflict - deleting webhook and retrying getUpdates');
       await deleteWebhook();
-      return getUpdates(offset);
+      return getUpdates(offset, { timeout: POLL_TIMEOUT });
     }
     throw err;
   }
@@ -372,7 +373,10 @@ async function main() {
   state.processedUpdateIds ??= [];
 
   const updates = await fetchUpdates(state.offset);
-  note(`fetched ${updates.length} update(s) from offset ${state.offset}`);
+  note(
+    `fetched ${updates.length} update(s) from offset ${state.offset}` +
+      (POLL_TIMEOUT ? ` (long poll ${POLL_TIMEOUT}s)` : ''),
+  );
 
   let maxUpdateId = state.offset - 1;
   const processed = new Set(state.processedUpdateIds);

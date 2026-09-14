@@ -11,9 +11,9 @@
         ↓  (העתקה ידנית)
    Telegram Bot
         ↓
-GitHub Actions — כל 30 דקות
+GitHub Actions — כל 5 דקות, ~90 שניות האזנה בכל הרצה
         ↓
-   getUpdates  (long polling, ללא webhook)
+   getUpdates  (long polling אמיתי, timeout=25, ללא webhook)
         ↓
    parser.js → validator.js
         ↓
@@ -21,7 +21,7 @@ GitHub Actions — כל 30 דקות
         ↓
    אישור שלך (כפתור או /approve)
         ↓
-ההרצה הבאה של ה־Action מזהה את האישור
+אותה הרצה (או הבאה) מזהה את האישור
         ↓
    data/synagogues/<id>.json   +   data/all.json
         ↓
@@ -215,8 +215,11 @@ npm test
 
 ## תפעול ותקלות
 
-**כמה זמן לוקח פרסום?** עד ~30 דקות עד שהתצוגה המקדימה מגיעה, ועוד ~30 דקות
-מהאישור עד הפרסום. `gh workflow run telegram-poller.yml` מזרז כל שלב.
+**כמה זמן לוקח פרסום?** ה-Action רץ כל 5 דקות, ובכל הרצה מאזין ~90 שניות עם
+long polling של טלגרם. אם ההודעה נשלחת בזמן שההרצה פעילה — התגובה מגיעה תוך
+שניות, וגם האישור מטופל באותה הרצה. אחרת ממתינים עד ~5 דקות לתיזמון הבא.
+GitHub לא מאפשר cron תכוף מ-5 דקות, ודוחה הרצות מתוזמנות בזמני עומס.
+`gh workflow run telegram-poller.yml` מזרז כל שלב.
 
 **שגיאת 409 ב־Actions** — מישהו רשם Webhook לבוט. ההרצה מזהה את זה, מוחקת את
 ה־Webhook וממשיכה לבד.

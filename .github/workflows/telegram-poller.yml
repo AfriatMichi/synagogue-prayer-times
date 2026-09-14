@@ -1,12 +1,13 @@
 name: Telegram Poller
 
-# No webhook anywhere in this project: GitHub Actions polls getUpdates on a
-# schedule, so the whole pipeline needs nothing but this repository.
+# No webhook anywhere in this project: GitHub Actions polls getUpdates, so the
+# whole pipeline needs nothing but this repository.
 on:
   schedule:
-    # Every 30 minutes. GitHub routinely runs scheduled jobs late under load,
-    # so treat this as "about every half hour", not a guarantee.
-    - cron: '*/30 * * * *'
+    # Five minutes is GitHub's floor - a shorter cron is accepted but still only
+    # fires every 5 minutes, and scheduled runs are routinely delayed under
+    # load. The in-run loop below is what actually gives second-level latency.
+    - cron: '*/5 * * * *'
   workflow_dispatch:
 
 permissions:
@@ -35,39 +36,68 @@ jobs:
           TELEGRAM_OWNER_ID: ${{ secrets.TELEGRAM_OWNER_ID }}
         run: |
           missing=""
-          [ -z "$TELEGRAM_BOT_TOKEN" ] && missing="$missing TELEGRAM_BOT_TOKEN"
-          [ -z "$TELEGRAM_OWNER_ID" ] && missing="$missing TELEGRAM_OWNER_ID"
+          if [ -z "$TELEGRAM_BOT_TOKEN" ]; then missing="$missing TELEGRAM_BOT_TOKEN"; fi
+          if [ -z "$TELEGRAM_OWNER_ID" ]; then missing="$missing TELEGRAM_OWNER_ID"; fi
           if [ -n "$missing" ]; then
             echo "::error::Missing repository secret(s):$missing"
             echo "Set them with: gh secret set <NAME> --repo ${{ github.repository }}"
             exit 1
           fi
 
-      - name: Poll Telegram and process updates
+      # One iteration = one long poll (blocks up to POLL_TIMEOUT seconds until a
+      # message arrives) followed by a commit. Committing inside the loop is
+      # what preserves the ordering guarantee: the stored offset only advances
+      # in a commit that already landed, and Telegram only drops an update once
+      # the *next* iteration's getUpdates confirms it. A run that dies mid-loop
+      # therefore replays, it does not lose messages.
+      - name: Poll Telegram and sync
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_OWNER_ID: ${{ secrets.TELEGRAM_OWNER_ID }}
-        run: node src/run.js
-
-      # The offset only moves forward in a file this step commits. If the push
-      # fails, the next run re-reads the same updates from Telegram rather than
-      # losing them.
-      - name: Commit and push
+          POLL_TIMEOUT: '25'
+          LOOP_SECONDS: '90'
         run: |
-          if [ -z "$(git status --porcelain)" ]; then
-            echo "nothing changed"
-            exit 0
-          fi
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-          git commit -m "chore: telegram sync $(date -u +'%Y-%m-%d %H:%M UTC')"
-          for attempt in 1 2 3; do
-            if git push; then
-              exit 0
+
+          sync() {
+            if [ -z "$(git status --porcelain)" ]; then
+              return 0
             fi
-            echo "push rejected (attempt $attempt), rebasing on origin"
-            git pull --rebase --autostash origin "${GITHUB_REF_NAME}" || true
+            git add -A
+            git commit -q -m "chore: telegram sync $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
+            for attempt in 1 2 3; do
+              if git push -q; then
+                return 0
+              fi
+              echo "push rejected (attempt $attempt), rebasing on origin"
+              git pull --rebase --autostash -q origin "$GITHUB_REF_NAME" || true
+            done
+            echo "::error::could not push after 3 attempts"
+            return 1
+          }
+
+          deadline=$(( $(date +%s) + LOOP_SECONDS ))
+          iterations=0
+          failures=0
+
+          while [ "$(date +%s)" -lt "$deadline" ]; do
+            iterations=$(( iterations + 1 ))
+            if node src/run.js; then
+              failures=0
+            else
+              failures=$(( failures + 1 ))
+              echo "::warning::poll iteration $iterations failed ($failures in a row)"
+              if [ "$failures" -ge 3 ]; then
+                echo "::error::three consecutive poll failures, giving up"
+                sync || true
+                exit 1
+              fi
+              sleep 5
+            fi
+            if ! sync; then
+              exit 1
+            fi
           done
-          echo "::error::could not push after 3 attempts"
-          exit 1
+
+          echo "finished after $iterations iteration(s)"
