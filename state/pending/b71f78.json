@@ -8,8 +8,8 @@
   "previewMessageId": 5,
   "rawText": "*זמני תפילות צום גדליה*\n\nסליחות- *05:00*\nשחרית-  *06:00*\n      מניין שני:\nסליחות- *06:00* \nשחרית - *07:00*\nמנחה-    *18:15*\nערבית-   *19:05*\n\nבברכה ועד בית הכנסת.",
   "parsed": {
-    "synagogueId": null,
-    "synagogueName": null,
+    "synagogueId": "zechor-leavraham",
+    "synagogueName": "בית כנסת זכור לאברהם",
     "matchedAlias": null,
     "dayType": "holiday",
     "dayTypeInferred": false,
@@ -92,10 +92,8 @@
     "confidence": 0.65
   },
   "validation": {
-    "ok": false,
-    "errors": [
-      "לא זוהה בית כנסת בהודעה. בחר בית כנסת מהכפתורים או שלח /shul <id> <בית-כנסת>."
-    ],
+    "ok": true,
+    "errors": [],
     "warnings": [
       "לחג לא הוגדר תאריך. אפשר להוסיף עם /date <id> YYYY-MM-DD."
     ]
