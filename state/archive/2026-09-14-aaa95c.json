@@ -1,6 +1,6 @@
 {
   "id": "aaa95c",
-  "status": "pending",
+  "status": "rejected",
   "createdAt": "2026-09-14T11:06:53.105Z",
   "updateId": 758487091,
   "chatId": 5834477243,
@@ -35,5 +35,6 @@
     ]
   },
   "publishedAt": null,
-  "error": null
+  "error": null,
+  "archivedAt": "2026-09-14T11:07:01.282Z"
 }
