@@ -5,11 +5,15 @@ name: Telegram Poller
 on:
   schedule:
     # GitHub's `schedule` is best-effort: runs are delayed under load and some
-    # are dropped outright. Rather than lean on a frequent cron, each run stays
-    # alive for ~50 minutes (see LOOP_SECONDS), so one trigger per hour covers
-    # most of it. Offset from :00 on purpose - the top of the hour is when the
-    # scheduler is busiest and most likely to skip a run.
-    - cron: '7 * * * *'
+    # are dropped outright with no error. Measured on this repo: 1 of 8 expected
+    # runs delivered, and that one 48 minutes late.
+    #
+    # Two things follow from how that queue behaves. Load peaks at the top of
+    # the hour and on */5 boundaries, so every minute here is deliberately not a
+    # multiple of 5 and none sits within five minutes of :00. And since any
+    # single attempt may silently vanish, we take four attempts an hour instead
+    # of one - the concurrency group below caps what that can cost.
+    - cron: '11,26,41,56 * * * *'
   workflow_dispatch:
 
 permissions:
@@ -18,11 +22,17 @@ permissions:
 # Two simultaneous getUpdates calls on one bot token return 409 Conflict, and a
 # second job would also race on the commit.
 #
-# A scheduled run queues behind whatever is already looping. A manual dispatch
-# cancels it instead: you reach for that button precisely when you want the bot
-# to answer now, and waiting up to 50 minutes for the current loop to end would
-# defeat the point. Cancelling is safe - the offset only advances in a commit
-# that already landed, so at worst the next run replays the same update.
+# A scheduled run queues behind whatever is already looping. GitHub keeps at
+# most one run pending per group - a newer one replaces the older pending run -
+# so four attempts an hour cannot pile up. Better still, a pending run starts
+# the moment the current loop ends, chaining coverage across the hour instead
+# of leaving a gap.
+#
+# A manual dispatch cancels instead of queueing: you reach for that button
+# precisely when you want the bot to answer now, and waiting up to 50 minutes
+# for the current loop to end would defeat the point. Cancelling is safe - the
+# offset only advances in a commit that already landed, so at worst the next
+# run replays the same update.
 concurrency:
   group: telegram-poller
   cancel-in-progress: ${{ github.event_name == 'workflow_dispatch' }}
