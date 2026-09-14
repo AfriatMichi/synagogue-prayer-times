@@ -8,8 +8,8 @@
   "previewMessageId": 24,
   "rawText": "05:25 — סליחות ושחרית א'\n06:30 — סליחות ושחרית ב'\n12:30 — סליחות ג'\n13:30 — מנחה בערב שבת וחג\n18:30 — תפילת מנחה\n19:15 — דף יומי\n19:15 — ערבית א'\n22:00 — ערבית ב'",
   "parsed": {
-    "synagogueId": null,
-    "synagogueName": null,
+    "synagogueId": "merkazi",
+    "synagogueName": "בית כנסת מרכזי",
     "matchedAlias": null,
     "dayType": "weekday",
     "dayTypeInferred": true,
@@ -103,10 +103,8 @@
     "confidence": 0.45
   },
   "validation": {
-    "ok": false,
-    "errors": [
-      "לא זוהה בית כנסת בהודעה. בחר בית כנסת מהכפתורים או שלח /shul <id> <בית-כנסת>."
-    ],
+    "ok": true,
+    "errors": [],
     "warnings": [
       "סוג היום לא נכתב במפורש בהודעה - הונח \"יום חול\".",
       "ביטחון נמוך בניתוח (0.45)."
