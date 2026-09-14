@@ -24,13 +24,12 @@ permissions:
 #
 # A scheduled run queues behind whatever is already looping. GitHub keeps at
 # most one run pending per group - a newer one replaces the older pending run -
-# so four attempts an hour cannot pile up. Better still, a pending run starts
-# the moment the current loop ends, chaining coverage across the hour instead
-# of leaving a gap.
+# so four attempts an hour cannot pile up. With a 10 minute loop they rarely
+# overlap at all, so each attempt runs on its own.
 #
 # A manual dispatch cancels instead of queueing: you reach for that button
-# precisely when you want the bot to answer now, and waiting up to 50 minutes
-# for the current loop to end would defeat the point. Cancelling is safe - the
+# precisely when you want the bot to answer now, and waiting out the current
+# loop would defeat the point. Cancelling is safe - the
 # offset only advances in a commit that already landed, so at worst the next
 # run replays the same update.
 concurrency:
@@ -40,9 +39,9 @@ concurrency:
 jobs:
   poll:
     runs-on: ubuntu-latest
-    # The loop targets ~50 minutes; this only stops a wedged run from holding
+    # The loop targets ~10 minutes; this only stops a wedged run from holding
     # the concurrency group for the default six hours.
-    timeout-minutes: 55
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
 
@@ -75,9 +74,12 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_OWNER_ID: ${{ secrets.TELEGRAM_OWNER_ID }}
           POLL_TIMEOUT: '25'
-          # ~50 minutes, so an hourly trigger keeps the bot live for most of the
-          # hour and a single manual dispatch is worth running.
-          LOOP_SECONDS: '3000'
+          # ~10 minutes. Short enough that each of the four cron attempts an
+          # hour becomes its own visible run instead of being swallowed as a
+          # pending one behind a long loop - which is how we can tell how many
+          # attempts GitHub actually delivers. The cost is coverage: a trigger
+          # that lands buys 10 minutes of live bot, not 50.
+          LOOP_SECONDS: '600'
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
