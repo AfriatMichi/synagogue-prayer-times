@@ -3,9 +3,82 @@
   "name": "בית כנסת מרכזי",
   "icon": "🏛️",
   "weekday": {
-    "prayers": [],
+    "prayers": [
+      {
+        "type": "selichot",
+        "name": "סליחות ושחרית א'",
+        "time": "05:25",
+        "minyan": null,
+        "nusach": null,
+        "note": null,
+        "order": 0
+      },
+      {
+        "type": "selichot",
+        "name": "סליחות ושחרית ב'",
+        "time": "06:30",
+        "minyan": null,
+        "nusach": null,
+        "note": null,
+        "order": 1
+      },
+      {
+        "type": "selichot",
+        "name": "סליחות ג'",
+        "time": "12:30",
+        "minyan": null,
+        "nusach": null,
+        "note": null,
+        "order": 2
+      },
+      {
+        "type": "mincha",
+        "name": "מנחה בערב שבת וחג",
+        "time": "13:30",
+        "minyan": null,
+        "nusach": null,
+        "note": null,
+        "order": 3
+      },
+      {
+        "type": "mincha",
+        "name": "תפילת מנחה",
+        "time": "18:30",
+        "minyan": null,
+        "nusach": null,
+        "note": null,
+        "order": 4
+      },
+      {
+        "type": "daf_yomi",
+        "name": "דף יומי",
+        "time": "19:15",
+        "minyan": null,
+        "nusach": null,
+        "note": null,
+        "order": 5
+      },
+      {
+        "type": "arvit",
+        "name": "ערבית א'",
+        "time": "19:15",
+        "minyan": null,
+        "nusach": null,
+        "note": null,
+        "order": 6
+      },
+      {
+        "type": "arvit",
+        "name": "ערבית ב'",
+        "time": "22:00",
+        "minyan": null,
+        "nusach": null,
+        "note": null,
+        "order": 7
+      }
+    ],
     "notes": [],
-    "updatedAt": null
+    "updatedAt": "2026-09-14T18:36:37.190Z"
   },
   "shabbat": {
     "prayers": [],
@@ -59,11 +132,11 @@
       "updatedAt": "2026-09-14T10:22:59.949Z"
     }
   ],
-  "updatedAt": "2026-09-14T10:22:59.949Z",
+  "updatedAt": "2026-09-14T18:36:37.190Z",
   "source": {
     "channel": "telegram",
-    "updateId": 758487088,
-    "messageId": 11,
-    "receivedAt": "2026-09-14T10:13:38.649Z"
+    "updateId": 758487097,
+    "messageId": 23,
+    "receivedAt": "2026-09-14T18:36:27.826Z"
   }
 }

@@ -1,6 +1,6 @@
 {
   "id": "e12ad7",
-  "status": "pending",
+  "status": "published",
   "createdAt": "2026-09-14T18:36:27.826Z",
   "updateId": 758487097,
   "chatId": 5834477243,
@@ -110,6 +110,7 @@
       "ביטחון נמוך בניתוח (0.45)."
     ]
   },
-  "publishedAt": null,
-  "error": null
+  "publishedAt": "2026-09-14T18:36:37.191Z",
+  "error": null,
+  "archivedAt": "2026-09-14T18:36:37.191Z"
 }
