@@ -4,25 +4,35 @@ name: Telegram Poller
 # whole pipeline needs nothing but this repository.
 on:
   schedule:
-    # Five minutes is GitHub's floor - a shorter cron is accepted but still only
-    # fires every 5 minutes, and scheduled runs are routinely delayed under
-    # load. The in-run loop below is what actually gives second-level latency.
-    - cron: '*/5 * * * *'
+    # GitHub's `schedule` is best-effort: runs are delayed under load and some
+    # are dropped outright. Rather than lean on a frequent cron, each run stays
+    # alive for ~50 minutes (see LOOP_SECONDS), so one trigger per hour covers
+    # most of it. Offset from :00 on purpose - the top of the hour is when the
+    # scheduler is busiest and most likely to skip a run.
+    - cron: '7 * * * *'
   workflow_dispatch:
 
 permissions:
   contents: write
 
 # Two simultaneous getUpdates calls on one bot token return 409 Conflict, and a
-# second job would also race on the commit. Queue runs instead of cancelling
-# them - a cancelled run could drop a preview it already sent.
+# second job would also race on the commit.
+#
+# A scheduled run queues behind whatever is already looping. A manual dispatch
+# cancels it instead: you reach for that button precisely when you want the bot
+# to answer now, and waiting up to 50 minutes for the current loop to end would
+# defeat the point. Cancelling is safe - the offset only advances in a commit
+# that already landed, so at worst the next run replays the same update.
 concurrency:
   group: telegram-poller
-  cancel-in-progress: false
+  cancel-in-progress: ${{ github.event_name == 'workflow_dispatch' }}
 
 jobs:
   poll:
     runs-on: ubuntu-latest
+    # The loop targets ~50 minutes; this only stops a wedged run from holding
+    # the concurrency group for the default six hours.
+    timeout-minutes: 55
     steps:
       - uses: actions/checkout@v4
 
@@ -55,7 +65,9 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_OWNER_ID: ${{ secrets.TELEGRAM_OWNER_ID }}
           POLL_TIMEOUT: '25'
-          LOOP_SECONDS: '90'
+          # ~50 minutes, so an hourly trigger keeps the bot live for most of the
+          # hour and a single manual dispatch is worth running.
+          LOOP_SECONDS: '3000'
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
