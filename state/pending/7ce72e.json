@@ -1,0 +1,98 @@
+{
+  "id": "7ce72e",
+  "status": "pending",
+  "createdAt": "2026-09-14T10:11:57.794Z",
+  "updateId": 758487087,
+  "chatId": 5834477243,
+  "messageId": 8,
+  "previewMessageId": 10,
+  "rawText": "מרכזי:\n05:12\n05:25\n06:30\n18:20\n19:09\nצום גדליה\nהתחלת התענית\nסליחות ושחרית א׳\nסליחות ושחרית ב׳\nתפילת מנחה\nערבית וצאת הצום",
+  "parsed": {
+    "synagogueId": "merkazi",
+    "synagogueName": "בית כנסת מרכזי",
+    "matchedAlias": "מרכזי",
+    "dayType": "holiday",
+    "dayTypeInferred": false,
+    "holiday": {
+      "slug": "tzom-gedalia",
+      "label": "צום גדליה",
+      "date": null
+    },
+    "prayers": [
+      {
+        "type": "selichot",
+        "name": "סליחות ושחרית א׳",
+        "time": null,
+        "minyan": null,
+        "nusach": null,
+        "note": null,
+        "line": "סליחות ושחרית א׳",
+        "order": 0
+      },
+      {
+        "type": "selichot",
+        "name": "סליחות ושחרית ב׳",
+        "time": null,
+        "minyan": null,
+        "nusach": null,
+        "note": null,
+        "line": "סליחות ושחרית ב׳",
+        "order": 1
+      },
+      {
+        "type": "arvit",
+        "name": "ערבית וצאת הצום",
+        "time": null,
+        "minyan": null,
+        "nusach": null,
+        "note": null,
+        "line": "ערבית וצאת הצום",
+        "order": 2
+      }
+    ],
+    "notes": [
+      "התחלת התענית",
+      "תפילת מנחה"
+    ],
+    "unparsed": [
+      {
+        "line": "05:12",
+        "reason": "time-without-prayer"
+      },
+      {
+        "line": "05:25",
+        "reason": "time-without-prayer"
+      },
+      {
+        "line": "06:30",
+        "reason": "time-without-prayer"
+      },
+      {
+        "line": "18:20",
+        "reason": "time-without-prayer"
+      },
+      {
+        "line": "19:09",
+        "reason": "time-without-prayer"
+      }
+    ],
+    "headers": [
+      "מרכזי:",
+      "צום גדליה"
+    ],
+    "title": "מרכזי:",
+    "confidence": 0.7
+  },
+  "validation": {
+    "ok": false,
+    "errors": [
+      "אף תפילה לא כוללת שעה."
+    ],
+    "warnings": [
+      "5 שורות עם שעה לא זוהו - בדוק אותן למטה.",
+      "לחג לא הוגדר תאריך. אפשר להוסיף עם /date <id> YYYY-MM-DD."
+    ]
+  },
+  "publishedAt": null,
+  "error": null
+}
