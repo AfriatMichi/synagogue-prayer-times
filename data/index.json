@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-14T08:59:58.832Z",
+  "updatedAt": "2026-09-14T09:25:40.253Z",
   "synagogues": [
     {
       "id": "klal-yisrael",
@@ -53,7 +53,7 @@
       "id": "zechor-leavraham",
       "name": "בית כנסת זכור לאברהם",
       "icon": "🏠",
-      "updatedAt": null
+      "updatedAt": "2026-09-14T09:25:40.252Z"
     }
   ]
 }
