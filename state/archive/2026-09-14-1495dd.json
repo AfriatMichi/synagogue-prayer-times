@@ -1,6 +1,6 @@
 {
   "id": "1495dd",
-  "status": "pending",
+  "status": "published",
   "createdAt": "2026-09-14T10:13:38.649Z",
   "updateId": 758487088,
   "chatId": 5834477243,
@@ -102,6 +102,7 @@
       "לחג לא הוגדר תאריך. אפשר להוסיף עם /date <id> YYYY-MM-DD."
     ]
   },
-  "publishedAt": null,
-  "error": null
+  "publishedAt": "2026-09-14T10:22:59.950Z",
+  "error": null,
+  "archivedAt": "2026-09-14T10:22:59.951Z"
 }

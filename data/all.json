@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-14T10:09:05.291Z",
+  "updatedAt": "2026-09-14T10:22:59.950Z",
   "synagogues": [
     {
       "id": "klal-yisrael",
@@ -33,9 +33,60 @@
         "notes": [],
         "updatedAt": null
       },
-      "holidays": [],
-      "updatedAt": null,
-      "source": null
+      "holidays": [
+        {
+          "slug": "tzom-gedalia",
+          "label": "צום גדליה",
+          "date": null,
+          "prayers": [
+            {
+              "type": "selichot",
+              "name": "סליחות ושחרית א׳",
+              "time": "05:25",
+              "minyan": null,
+              "nusach": null,
+              "note": null,
+              "order": 0
+            },
+            {
+              "type": "selichot",
+              "name": "סליחות ושחרית ב׳",
+              "time": "06:30",
+              "minyan": null,
+              "nusach": null,
+              "note": null,
+              "order": 1
+            },
+            {
+              "type": "mincha",
+              "name": "תפילת מנחה",
+              "time": "18:20",
+              "minyan": null,
+              "nusach": null,
+              "note": null,
+              "order": 2
+            },
+            {
+              "type": "arvit",
+              "name": "ערבית וצאת הצום",
+              "time": "19:09",
+              "minyan": null,
+              "nusach": null,
+              "note": null,
+              "order": 3
+            }
+          ],
+          "notes": [],
+          "updatedAt": "2026-09-14T10:22:59.949Z"
+        }
+      ],
+      "updatedAt": "2026-09-14T10:22:59.949Z",
+      "source": {
+        "channel": "telegram",
+        "updateId": 758487088,
+        "messageId": 11,
+        "receivedAt": "2026-09-14T10:13:38.649Z"
+      }
     },
     {
       "id": "makdash-meat",
